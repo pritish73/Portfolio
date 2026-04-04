@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 12% 95%;
+    --foreground: 24 10% 15%;
+
+    --card: 40 12% 96%;
+    --card-foreground: 24 10% 15%;
+
+    --popover: 40 12% 96%;
+    --popover-foreground: 24 10% 15%;
+
+    --primary: 24 10% 20%;
+    --primary-foreground: 40 12% 98%;
+
+    --secondary: 35 15% 88%;
+    --secondary-foreground: 24 10% 25%;
+
+    --muted: 35 10% 90%;
+    --muted-foreground: 24 5% 45%;
+
+    --accent: 75 15% 40%;
+    --accent-foreground: 40 12% 98%;
+
+    --destructive: 10 30% 45%;
+    --destructive-foreground: 40 12% 98%;
+
+    --border: 35 10% 85%;
+    --input: 35 10% 85%;
+    --ring: 24 10% 20%;
+
+    --radius: 0.25rem;
+    --spacing: 0.3rem;
+
+    --shadow: 0px 2px 4px 0px hsl(24 10% 10% / 0.04);
+    --shadow-sm: 0px 1px 2px 0px hsl(24 10% 10% / 0.02);
+
+    --chart-1: 24 10% 20%;
+    --chart-2: 75 15% 40%;
+    --chart-3: 35 20% 60%;
+    --chart-4: 40 10% 75%;
+    --chart-5: 25 15% 35%;
+
+    --sidebar-background: 40 12% 94%;
+    --sidebar-foreground: 24 10% 20%;
+    --sidebar-primary: 24 10% 20%;
+    --sidebar-primary-foreground: 40 12% 98%;
+    --sidebar-accent: 35 15% 88%;
+    --sidebar-accent-foreground: 24 10% 25%;
+    --sidebar-border: 35 10% 85%;
+    --sidebar-ring: 24 10% 20%;
+  }
+
+  .dark {
+    --background: 24 10% 10%;
+    --foreground: 40 12% 90%;
+
+    --card: 24 10% 12%;
+    --card-foreground: 40 12% 90%;
+
+    --popover: 24 10% 14%;
+    --popover-foreground: 40 12% 90%;
+
+    --primary: 40 12% 85%;
+    --primary-foreground: 24 10% 10%;
+
+    --secondary: 24 5% 20%;
+    --secondary-foreground: 40 12% 90%;
+
+    --muted: 24 5% 18%;
+    --muted-foreground: 24 5% 60%;
+
+    --accent: 75 10% 55%;
+    --accent-foreground: 24 10% 10%;
+
+    --destructive: 10 40% 50%;
+    --destructive-foreground: 40 12% 98%;
+
+    --border: 24 5% 20%;
+    --input: 24 5% 20%;
+    --ring: 40 12% 85%;
+
+    --sidebar-background: 24 10% 8%;
+    --sidebar-foreground: 40 12% 80%;
+    --sidebar-primary: 40 12% 85%;
+    --sidebar-primary-foreground: 24 10% 10%;
+    --sidebar-accent: 24 5% 15%;
+    --sidebar-accent-foreground: 40 12% 90%;
+    --sidebar-border: 24 5% 15%;
+    --sidebar-ring: 40 12% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    letter-spacing: 0.05em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Noto Serif SC', serif;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for zen feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+/* Zen animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
