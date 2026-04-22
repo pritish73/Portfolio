@@ -11,6 +11,11 @@ import {
   Linkedin,
   Github,
 } from "lucide-react";
+import { useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const AI_IMG = "https://mgx-backend-cdn.metadl.com/generate/images/1075346/2026-03-31/c3fa4a6a-e958-4363-a375-eddff9422923.png";
 const CODE_IMG = "https://mgx-backend-cdn.metadl.com/generate/images/1075346/2026-03-31/7aa47ae3-2ddc-4a1e-b223-dd3c903c157d.png";
@@ -64,6 +69,20 @@ const projects: Project[] = [
 ];
 
 export default function ProjectsSection() {
+  useEffect(() => {
+  gsap.from(".project-card", {
+    scrollTrigger: {
+      trigger: "#projects",
+      start: "top 80%",
+    },
+    opacity: 0,
+    y: 80,
+    duration: 1,
+    stagger: 0.2,
+    ease: "power3.out",
+  });
+}, []);
+
   return (
     <>
       {/* Projects */}
@@ -76,7 +95,7 @@ export default function ProjectsSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {projects.map((project, index) => (
               <ScrollFadeIn key={index} delay={index * 120}>
-                <div className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300 group h-full">
+                <div className="project-card bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300 group h-full">
                   {/* Project Image */}
                   {project.image && (
                     <div className="h-40 overflow-hidden">
