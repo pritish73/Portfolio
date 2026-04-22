@@ -70,6 +70,7 @@ const projects: Project[] = [
 ];
 
 export default function ProjectsSection() {
+  const tiltRefs = useRef<HTMLDivElement[]>([]);
   useEffect(() => {
   // GSAP (already there)
   gsap.from(".project-card", {
@@ -95,6 +96,26 @@ export default function ProjectsSection() {
       });
     }
   });
+
+  // CLEAN OLD INSTANCES
+tiltRefs.current.forEach((el) => {
+  if (el && (el as any).vanillaTilt) {
+    (el as any).vanillaTilt.destroy();
+  }
+});
+
+// INIT TILT
+tiltRefs.current.forEach((el) => {
+  if (el) {
+    VanillaTilt.init(el, {
+      max: 8,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.15,
+      scale: 1.02,
+    });
+  }
+});
 }, []);
 
 const tiltRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -112,7 +133,9 @@ const tiltRef = useRef<(HTMLDivElement | null)[]>([]);
             {projects.map((project, index) => (
               <ScrollFadeIn key={index} delay={index * 120}>
                 <div
-  ref={(el) => (tiltRef.current[index] = el)}
+  ref={(el) => {
+    if (el) tiltRefs.current[index] = el;
+  }}
   className="project-card bg-card border border-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl group h-full"
 >
                   {/* Project Image */}
