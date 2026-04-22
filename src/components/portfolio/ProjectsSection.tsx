@@ -1,3 +1,5 @@
+import VanillaTilt from "vanilla-tilt";
+import { useEffect, useRef } from "react";
 import { SectionTitle } from "./AboutSection";
 import ScrollFadeIn from "@/components/ScrollFadeIn";
 import {
@@ -11,7 +13,6 @@ import {
   Linkedin,
   Github,
 } from "lucide-react";
-import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -70,6 +71,7 @@ const projects: Project[] = [
 
 export default function ProjectsSection() {
   useEffect(() => {
+  // GSAP (already there)
   gsap.from(".project-card", {
     scrollTrigger: {
       trigger: "#projects",
@@ -79,9 +81,23 @@ export default function ProjectsSection() {
     y: 80,
     duration: 1,
     stagger: 0.2,
-    ease: "power3.out",
+  });
+
+  // VANILLA TILT
+  tiltRef.current.forEach((el) => {
+    if (el) {
+      VanillaTilt.init(el, {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+        scale: 1.03,
+      });
+    }
   });
 }, []);
+
+const tiltRef = useRef<(HTMLDivElement | null)[]>([]);
 
   return (
     <>
@@ -95,7 +111,10 @@ export default function ProjectsSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {projects.map((project, index) => (
               <ScrollFadeIn key={index} delay={index * 120}>
-                <div className="project-card bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-300 group h-full">
+                <div
+  ref={(el) => (tiltRef.current[index] = el)}
+  className="project-card bg-card border border-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl group h-full"
+>
                   {/* Project Image */}
                   {project.image && (
                     <div className="h-40 overflow-hidden">
