@@ -65,7 +65,7 @@ export default function HeroSection() {
           ref={subtitleRef}
           className="text-lg md:text-xl text-muted-foreground font-light mb-6"
         >
-          AI Engineer | Computer Vision | Real-time Systems
+          Computer Engineering Student | AI/ML | GenAI
         </p>
 
         {/* Description */}
@@ -73,7 +73,7 @@ export default function HeroSection() {
           ref={descRef}
           className="text-sm text-muted-foreground max-w-lg mx-auto mb-10 leading-relaxed"
         >
-          Building intelligent real-time systems using AI, deep learning, and computer vision to solve real-world problems.
+          Building intelligent systems using machine learning, deep learning, generative AI, and computer vision to solve real-world problems.
         </p>
 
         {/* Links */}
