@@ -10,24 +10,39 @@ interface SkillCategory {
 
 const skillCategories: SkillCategory[] = [
   {
-    title: "Languages",
+    title: "Programming Languages",
     icon: <Code className="w-5 h-5" />,
-    skills: ["Python", "C++", "SQL", "R", "HTML", "CSS", "JavaScript"],
+    skills: ["Python", "C++", "SQL", "JavaScript", "HTML", "CSS"],
   },
   {
-    title: "AI / ML",
+    title: "Machine Learning & AI",
     icon: <Brain className="w-5 h-5" />,
-    skills: ["TensorFlow", "Keras", "Scikit-Learn", "NumPy", "Pandas"],
+    skills: ["PyTorch", "TensorFlow", "Scikit-learn", "XGBoost", "LightGBM", "NumPy", "Pandas"],
   },
   {
-    title: "Tools",
+    title: "GenAI",
+    icon: <Brain className="w-5 h-5" />,
+    skills: ["LangChain", "Hugging Face Transformers", "Sentence Transformers", "FAISS", "Ollama", "RAG", "Prompt Engineering"],
+  },
+  {
+    title: "Computer Vision",
+    icon: <Brain className="w-5 h-5" />,
+    skills: ["OpenCV", "Ultralytics YOLOv8", "MediaPipe"],
+  },
+  {
+    title: "Web Development",
+    icon: <Code className="w-5 h-5" />,
+    skills: ["React", "Vite", "REST APIs", "Streamlit"],
+  },
+  {
+    title: "Developer Tools",
     icon: <Wrench className="w-5 h-5" />,
-    skills: ["VS Code", "RStudio", "Git"],
+    skills: ["Git", "GitHub", "VS Code", "Google Colab", "Jupyter Notebook"],
   },
   {
-    title: "Visualization",
+    title: "Core Concepts",
     icon: <BarChart3 className="w-5 h-5" />,
-    skills: ["Matplotlib", "Seaborn"],
+    skills: ["Data Structures & Algorithms", "OOP", "Machine Learning", "Deep Learning", "Computer Vision", "Natural Language Processing", "DBMS"],
   },
 ];
 
