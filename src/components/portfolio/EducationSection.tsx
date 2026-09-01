@@ -17,19 +17,19 @@ const educationData: EducationItem[] = [
     institution: "Thapar Institute of Engineering and Technology, Patiala",
     degree: "B.E. in Computer Engineering",
     year: "2023–2027",
-    grade: "CGPA: 8.15 / 10.00",
+    grade: "CGPA: 8.12 / 10.00",
     coursework:
-      "Data Structure, Algorithms, Database Systems, Machine Learning, Deep Learning",
+      "Data Structures & Algorithms, Machine Learning, Deep Learning, Computer Vision, DBMS",
   },
   {
     institution: "BCM Arya Model School, Ludhiana",
-    degree: "12th Grade",
+    degree: "Class XII",
     year: "2023",
     grade: "89.8%",
   },
   {
     institution: "Delhi Public School, Ludhiana",
-    degree: "10th Grade",
+    degree: "Class X",
     year: "2021",
     grade: "90.1%",
   },
