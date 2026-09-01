@@ -9,11 +9,11 @@ export default function AboutSection() {
           <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
             Computer Engineering student at{" "}
             <span className="text-foreground font-medium">
-              Thapar Institute of Engineering & Technology
+              Thapar Institute of Engineering and Technology
             </span>{" "}
-            (2023–2027) with strong foundations in C++, Python, and Machine Learning.
-            Interested in building intelligent systems, solving complex problems,
-            and developing impactful real-world software.
+            (2023–2027) with strong foundations in Python, C++, Machine Learning,
+            Deep Learning, Computer Vision, and Natural Language Processing.
+            Interested in building intelligent systems and solving complex real-world problems.
           </p>
         </div>
       </ScrollFadeIn>
