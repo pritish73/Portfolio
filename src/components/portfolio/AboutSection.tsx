@@ -1,3 +1,4 @@
+import { useScrollFadeIn } from "@/hooks/useScrollFadeIn";
 import ScrollFadeIn from "@/components/ScrollFadeIn";
 
 export default function AboutSection() {
@@ -20,11 +21,13 @@ export default function AboutSection() {
 }
 
 export function SectionTitle({ title }: { title: string }) {
+  const { ref, isVisible } = useScrollFadeIn({ threshold: 0.35, rootMargin: "0px 0px -80px 0px" });
+
   return (
-    <div className="section-title-reveal flex items-center justify-center gap-4 mb-12">
-      <div className="section-title-line h-px flex-1 max-w-[60px] bg-border" />
-      <h2 className="section-title-text text-2xl md:text-3xl font-serif font-bold text-foreground tracking-zen">{title}</h2>
-      <div className="section-title-line h-px flex-1 max-w-[60px] bg-border" />
+    <div ref={ref} className="flex items-center justify-center gap-4 mb-12" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(20px)", transition: "opacity 650ms cubic-bezier(0.16, 1, 0.3, 1), transform 650ms cubic-bezier(0.16, 1, 0.3, 1)" }}>
+      <div className="h-px flex-1 max-w-[60px] bg-border origin-right" style={{ transform: isVisible ? "scaleX(1)" : "scaleX(0)", transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 120ms" }} />
+      <h2 className="text-2xl md:text-3xl font-serif font-bold text-foreground tracking-zen" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(12px)", letterSpacing: isVisible ? "0.05em" : "0.16em", transition: "opacity 500ms ease 80ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 80ms, letter-spacing 700ms cubic-bezier(0.16, 1, 0.3, 1) 80ms" }}>{title}</h2>
+      <div className="h-px flex-1 max-w-[60px] bg-border origin-left" style={{ transform: isVisible ? "scaleX(1)" : "scaleX(0)", transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 120ms" }} />
     </div>
   );
 }
