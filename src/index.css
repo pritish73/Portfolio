@@ -39,23 +39,23 @@ html { scroll-behavior: smooth; }
 ::-webkit-scrollbar-track { background: hsl(var(--muted)); }
 ::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground)); border-radius: 3px; }
 
-/* Shared interactive motion: applies to the existing card design across sections */
 @layer components {
   .bg-card.border.border-border.rounded-lg {
     transform: translateZ(0);
     transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease;
     will-change: transform;
   }
-  .bg-card.border.border-border.rounded-lg:hover {
-    transform: translateY(-7px) scale(1.012);
-    box-shadow: 0 18px 38px hsl(var(--foreground) / 0.10);
-    border-color: hsl(var(--accent) / 0.45);
-  }
+  .bg-card.border.border-border.rounded-lg:hover { transform: translateY(-7px) scale(1.012); box-shadow: 0 18px 38px hsl(var(--foreground) / 0.10); border-color: hsl(var(--accent) / 0.45); }
   .bg-card.border.border-border.rounded-lg:active { transform: translateY(-2px) scale(0.995); }
+  .section-title-reveal { opacity: 0; transform: translateY(18px); animation: section-title-in 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .section-title-line { transform: scaleX(0); animation: section-line-in 650ms cubic-bezier(0.22, 1, 0.36, 1) 180ms forwards; }
+  .section-title-text { animation: section-text-in 650ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both; }
+  @keyframes section-title-in { to { opacity: 1; transform: translateY(0); } }
+  @keyframes section-line-in { to { transform: scaleX(1); } }
+  @keyframes section-text-in { from { opacity: 0; letter-spacing: 0.18em; } to { opacity: 1; letter-spacing: 0.05em; } }
   @media (prefers-reduced-motion: reduce) {
-    .bg-card.border.border-border.rounded-lg,
-    .bg-card.border.border-border.rounded-lg:hover,
-    .bg-card.border.border-border.rounded-lg:active { transition: none; transform: none; }
+    .bg-card.border.border-border.rounded-lg, .bg-card.border.border-border.rounded-lg:hover, .bg-card.border.border-border.rounded-lg:active { transition: none; transform: none; }
+    .section-title-reveal, .section-title-line, .section-title-text { animation: none; opacity: 1; transform: none; }
   }
 }
 
