@@ -41,15 +41,15 @@ export default function InteractionEffects() {
         const rect = card.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width - 0.5;
         const y = (event.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = `perspective(700px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale3d(1.045, 1.045, 1.045) translateY(-4px)`;
-        card.style.transition = "transform 100ms ease-out, border-color 250ms ease, box-shadow 250ms ease";
+        card.style.transform = `perspective(600px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale3d(1.075, 1.075, 1.075) translateY(-7px)`;
+        card.style.transition = "transform 70ms ease-out, border-color 200ms ease, box-shadow 200ms ease";
         card.style.transformStyle = "preserve-3d";
-        card.style.boxShadow = `${-x * 14}px ${-y * 14}px 35px rgba(0,0,0,0.18)`;
+        card.style.boxShadow = `${-x * 22}px ${-y * 22}px 50px rgba(0,0,0,0.25)`;
       };
       const onLeave = () => {
-        card.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateY(0)";
+        card.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateY(0)";
         card.style.boxShadow = "";
-        card.style.transition = "transform 350ms cubic-bezier(.2,.8,.2,1), border-color 250ms ease, box-shadow 350ms ease";
+        card.style.transition = "transform 400ms cubic-bezier(.2,.8,.2,1), border-color 250ms ease, box-shadow 400ms ease";
       };
       card.addEventListener("mousemove", onMove);
       card.addEventListener("mouseleave", onLeave);
