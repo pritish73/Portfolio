@@ -57,8 +57,8 @@ export default function SkillsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {skillCategories.map((category, index) => (
             <ScrollFadeIn key={index} delay={index * 100}>
-              <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all duration-300 group">
-                <div className="flex items-center gap-3 mb-4">
+              <div className="bg-card border border-border rounded-lg p-6 h-[220px] flex flex-col hover:shadow-md transition-all duration-300 group">
+                <div className="flex items-center gap-3 mb-4 shrink-0">
                   <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
                     {category.icon}
                   </div>
@@ -67,7 +67,7 @@ export default function SkillsSection() {
                   </h3>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 content-start overflow-hidden">
                   {category.skills.map((skill, skillIndex) => (
                     <span
                       key={skillIndex}
