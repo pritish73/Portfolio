@@ -43,7 +43,33 @@ export default function HeroSection() {
 }
 
 function ContactLink({ icon, text, href }: { icon: React.ReactNode; text: string; href?: string }) {
-  const content = <span className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105">{icon}{text}</span>;
+  const linkRef = useRef<HTMLAnchorElement | HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const element = linkRef.current;
+    if (!element || window.matchMedia("(pointer: coarse)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const strength = 0.28;
+    const handleMove = (event: MouseEvent) => {
+      const rect = element.getBoundingClientRect();
+      const x = event.clientX - (rect.left + rect.width / 2);
+      const y = event.clientY - (rect.top + rect.height / 2);
+      gsap.to(element, { x: x * strength, y: y * strength, duration: 0.35, ease: "power3.out" });
+    };
+    const handleLeave = () => {
+      gsap.to(element, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.5)" });
+    };
+
+    element.addEventListener("mousemove", handleMove);
+    element.addEventListener("mouseleave", handleLeave);
+    return () => {
+      element.removeEventListener("mousemove", handleMove);
+      element.removeEventListener("mouseleave", handleLeave);
+      gsap.killTweensOf(element);
+    };
+  }, []);
+
+  const content = <span ref={linkRef} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 will-change-transform">{icon}{text}</span>;
   if (href) return <a href={href} target="_blank" rel="noopener noreferrer">{content}</a>;
-  return content;
+  return <span>{content}</span>;
 }
