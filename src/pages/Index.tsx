@@ -3,6 +3,7 @@ import AboutSection from "@/components/portfolio/AboutSection";
 import EducationSection from "@/components/portfolio/EducationSection";
 import SkillsSection from "@/components/portfolio/SkillsSection";
 import ProjectsSection from "@/components/portfolio/ProjectsSection";
+import LeetCode from "./LeetCode";
 import InteractionEffects from "@/components/portfolio/InteractionEffects";
 
 export default function Index() {
@@ -12,6 +13,7 @@ export default function Index() {
       <HeroSection />
       <AboutSection />
       <EducationSection />
+      <LeetCode />
       <SkillsSection />
       <ProjectsSection />
     </div>
