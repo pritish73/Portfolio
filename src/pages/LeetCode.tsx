@@ -12,10 +12,7 @@ function findNestedValue(obj: unknown, key: string): any {
   if (!obj || typeof obj !== "object") return undefined;
   const record = obj as Record<string, any>;
   if (record[key] !== undefined) return record[key];
-  for (const value of Object.values(record)) {
-    const found = findNestedValue(value, key);
-    if (found !== undefined) return found;
-  }
+  for (const value of Object.values(record)) { const found = findNestedValue(value, key); if (found !== undefined) return found; }
   return undefined;
 }
 
@@ -40,14 +37,17 @@ export default function LeetCode() {
   const heatmap = useMemo(() => {
     let activity: Record<string, number> = {};
     try { activity = typeof calendar === "string" ? JSON.parse(calendar) : (calendar ?? {}); } catch { activity = {}; }
-    // LeetCode's submission calendar keys are UTC-midnight Unix timestamps.
-    // Use UTC here so the heatmap also works correctly in IST and other time zones.
+    const entries = Object.entries(activity).map(([key, value]) => [Number(key), Number(value)] as const).filter(([key, value]) => Number.isFinite(key) && Number.isFinite(value));
+    const byDay = new Map<string, number>();
+    for (const [timestamp, count] of entries) {
+      const d = new Date(timestamp * 1000);
+      const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
+      byDay.set(key, (byDay.get(key) ?? 0) + count);
+    }
     return Array.from({ length: 364 }, (_, i) => {
-      const date = new Date();
-      date.setUTCHours(0, 0, 0, 0);
-      date.setUTCDate(date.getUTCDate() - (363 - i));
-      const timestamp = Math.floor(date.getTime() / 1000);
-      return { date, count: Number(activity[String(timestamp)] ?? 0) };
+      const date = new Date(); date.setUTCHours(0, 0, 0, 0); date.setUTCDate(date.getUTCDate() - (363 - i));
+      const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`;
+      return { date, count: byDay.get(key) ?? 0 };
     });
   }, [calendar]);
 
