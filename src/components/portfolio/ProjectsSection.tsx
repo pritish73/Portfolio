@@ -1,5 +1,5 @@
 import VanillaTilt from "vanilla-tilt";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SectionTitle } from "./AboutSection";
 import ScrollFadeIn from "@/components/ScrollFadeIn";
 import { ExternalLink, Briefcase, Award, Users, MapPin, Phone, Mail, Linkedin, Github } from "lucide-react";
@@ -35,22 +35,54 @@ function MagneticLink({ children, href }: { children: React.ReactNode; href: str
 
 export default function ProjectsSection() {
   const tiltRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeSkill, setActiveSkill] = useState<string | null>(null);
+
   useEffect(() => {
+    const onSkillHover = (event: Event) => setActiveSkill((event as CustomEvent<string | null>).detail || null);
+    window.addEventListener("portfolio:skill-hover", onSkillHover);
     gsap.from(".project-card", { scrollTrigger: { trigger: "#projects", start: "top 80%" }, y: 80, duration: 1, stagger: 0.2 });
     tiltRef.current.forEach((el) => { if (el) VanillaTilt.init(el, { max: 8, speed: 400, glare: true, "max-glare": 0.15, scale: 1.02 }); });
-    return () => tiltRef.current.forEach((el) => { if (el && (el as any).vanillaTilt) (el as any).vanillaTilt.destroy(); });
+    return () => {
+      window.removeEventListener("portfolio:skill-hover", onSkillHover);
+      tiltRef.current.forEach((el) => { if (el && (el as any).vanillaTilt) (el as any).vanillaTilt.destroy(); });
+    };
   }, []);
+
   return (
     <>
-      <section id="projects" className="py-24 px-6"><div className="max-w-4xl mx-auto"><ScrollFadeIn><SectionTitle title="Projects" /></ScrollFadeIn><div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project, index) => <ScrollFadeIn key={index} delay={index * 120}><div ref={(el) => { tiltRef.current[index] = el; }} className="project-card bg-card border border-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl group h-full">
-          {project.image && <div className="h-40 overflow-hidden"><img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
-          <div className="p-5"><h3 className="font-serif font-bold text-foreground text-base mb-1 leading-snug">{project.title}</h3><p className="text-xs text-accent font-medium mb-3">{project.tech}</p><ul className="space-y-1.5">{project.points.map((point, pointIndex) => <li key={pointIndex} className="text-xs text-muted-foreground leading-relaxed flex gap-2"><span className="text-accent mt-1 shrink-0">•</span><span>{point}</span></li>)}</ul>
-            <MagneticLink href={project.github}><Github className="w-3.5 h-3.5" /> View on GitHub <ExternalLink className="w-3.5 h-3.5" /></MagneticLink>
-          </div></div></ScrollFadeIn>)}
-      </div></div></section>
+      <section id="projects" className="py-24 px-6">
+        <div className="max-w-4xl mx-auto"><ScrollFadeIn><SectionTitle title="Projects" /></ScrollFadeIn>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((project, index) => {
+              const isMatch = !!activeSkill && project.tech.toLowerCase().includes(activeSkill.toLowerCase());
+              const isDimmed = !!activeSkill && !isMatch;
+              return <ScrollFadeIn key={index} delay={index * 120}><div ref={(el) => { tiltRef.current[index] = el; }} className={`project-card bg-card border rounded-lg overflow-hidden transition-all duration-300 group h-full ${isMatch ? "border-accent shadow-xl scale-[1.015]" : "border-border hover:shadow-xl"} ${isDimmed ? "opacity-35" : "opacity-100"}`}>
+                {project.image && <div className="h-40 overflow-hidden"><img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
+                <div className="p-5"><h3 className="font-serif font-bold text-foreground text-base mb-1 leading-snug">{project.title}</h3><p className="text-xs text-accent font-medium mb-3">{project.tech}</p><ul className="space-y-1.5">{project.points.map((point, pointIndex) => <li key={pointIndex} className="text-xs text-muted-foreground leading-relaxed flex gap-2"><span className="text-accent mt-1 shrink-0">•</span><span>{point}</span></li>)}</ul>
+                  <MagneticLink href={project.github}><Github className="w-3.5 h-3.5" /> View on GitHub <ExternalLink className="w-3.5 h-3.5" /></MagneticLink>
+                </div></div></ScrollFadeIn>;
+            })}
+          </div>
+        </div>
+      </section>
 
-      <section id="experience" className="py-24 px-6 bg-secondary/30"><div className="max-w-3xl mx-auto"><ScrollFadeIn><SectionTitle title="Experience" /></ScrollFadeIn><ScrollFadeIn delay={150}><div className="bg-card border border-border rounded-lg p-6"><div className="flex items-start gap-4"><div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0"><Briefcase className="w-6 h-6" /></div><div><div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2"><h3 className="font-serif font-bold text-foreground text-lg">Research Intern</h3><span className="text-xs text-accent font-medium">Ongoing</span></div><p className="text-sm text-muted-foreground mb-3">Experiential Learning Centre, TIET</p><ul className="space-y-2"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Developing an AR-based Scuba Diving Training System using Augmented Reality (AR) to simulate immersive underwater environments.</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Implementing interactive 3D scenes, user interaction, and training modules to enhance learning and simulation realism.</span></li></ul></div></div></div></ScrollFadeIn><ScrollFadeIn delay={300}><div className="bg-card border border-border rounded-lg p-6 mt-6"><div className="flex items-start gap-4"><div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0"><Briefcase className="w-6 h-6" /></div><div><div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2"><h3 className="font-serif font-bold text-foreground text-lg">AI Intern</h3><span className="text-xs text-accent font-medium">June 2025 – July 2025</span></div><p className="text-sm text-muted-foreground mb-3">Experiential Learning Centre, TIET</p><ul className="space-y-2"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Developed a deep learning pipeline for EEG-based Mind Wandering Detection using CNN-LSTM architecture.</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Performed EEG preprocessing, spectrogram generation, model training, and evaluation using TensorFlow, Keras, and Python.</span></li></ul></div></div></div></ScrollFadeIn></div></section>
+      <section id="experience" className="py-24 px-6 bg-secondary/30">
+        <div className="max-w-4xl mx-auto"><ScrollFadeIn><SectionTitle title="Experience" /></ScrollFadeIn>
+          <div className="relative mt-10">
+            <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
+            <div className="space-y-10 md:space-y-14">
+              <ScrollFadeIn delay={150}><div className="relative grid md:grid-cols-2 md:gap-12 items-start">
+                <div className="hidden md:block text-right pr-10"><span className="text-xs font-medium text-accent">Ongoing</span><h3 className="font-serif font-bold text-foreground text-lg mt-1">Research Intern</h3><p className="text-sm text-muted-foreground mt-1">Experiential Learning Centre, TIET</p></div>
+                <div className="relative pl-14 md:pl-10"><div className="absolute left-3 md:-left-[57px] top-1 w-5 h-5 rounded-full border-4 border-background bg-accent shadow-[0_0_0_4px_hsl(var(--accent)/0.12)]" /><div className="bg-card border border-border rounded-lg p-6 hover:border-accent/50 hover:shadow-lg transition-all duration-300"><div className="md:hidden mb-3"><span className="text-xs font-medium text-accent">Ongoing</span><h3 className="font-serif font-bold text-foreground text-lg mt-1">Research Intern</h3><p className="text-sm text-muted-foreground mt-1">Experiential Learning Centre, TIET</p></div><ul className="space-y-2"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Developing an AR-based Scuba Diving Training System using Augmented Reality (AR) to simulate immersive underwater environments.</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Implementing interactive 3D scenes, user interaction, and training modules to enhance learning and simulation realism.</span></li></ul></div></div>
+              </div></ScrollFadeIn>
+              <ScrollFadeIn delay={300}><div className="relative grid md:grid-cols-2 md:gap-12 items-start">
+                <div className="relative pl-14 md:pl-0 md:pr-10 md:order-1 md:text-right"><div className="absolute left-3 md:-right-[57px] md:left-auto top-1 w-5 h-5 rounded-full border-4 border-background bg-accent shadow-[0_0_0_4px_hsl(var(--accent)/0.12)]" /><div className="bg-card border border-border rounded-lg p-6 hover:border-accent/50 hover:shadow-lg transition-all duration-300"><div className="md:hidden mb-3"><span className="text-xs font-medium text-accent">June 2025 – July 2025</span><h3 className="font-serif font-bold text-foreground text-lg mt-1">AI Intern</h3><p className="text-sm text-muted-foreground mt-1">Experiential Learning Centre, TIET</p></div><ul className="space-y-2 text-left"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Developed a deep learning pipeline for EEG-based Mind Wandering Detection using CNN-LSTM architecture.</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Performed EEG preprocessing, spectrogram generation, model training, and evaluation using TensorFlow, Keras, and Python.</span></li></ul></div></div>
+                <div className="hidden md:block pl-10 md:order-2"><span className="text-xs font-medium text-accent">June 2025 – July 2025</span><h3 className="font-serif font-bold text-foreground text-lg mt-1">AI Intern</h3><p className="text-sm text-muted-foreground mt-1">Experiential Learning Centre, TIET</p></div>
+              </div></ScrollFadeIn>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section id="achievements" className="py-24 px-6"><div className="max-w-3xl mx-auto"><ScrollFadeIn><SectionTitle title="Certifications" /></ScrollFadeIn><div className="grid grid-cols-1 md:grid-cols-2 gap-6"><ScrollFadeIn delay={100}><div className="bg-card border border-border rounded-lg p-6 h-full"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent"><Award className="w-5 h-5" /></div><h3 className="font-serif font-bold text-foreground text-lg">AI & Networking</h3></div><ul className="space-y-3"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>AI Fundamentals with IBM SkillsBuild – Cisco Networking Academy</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Introduction to Modern AI – Cisco Networking Academy</span></li></ul></div></ScrollFadeIn><ScrollFadeIn delay={200}><div className="bg-card border border-border rounded-lg p-6 h-full"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent"><Users className="w-5 h-5" /></div><h3 className="font-serif font-bold text-foreground text-lg">Deep Learning & ML</h3></div><ul className="space-y-3"><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Deep Learning with PyTorch: Image Segmentation – Coursera</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Fine Tune BERT for Text Classification with TensorFlow – Coursera</span></li><li className="text-sm text-muted-foreground flex gap-2"><span className="text-accent mt-0.5 shrink-0">•</span><span>Machine Learning with PySpark: Recommender System – Coursera</span></li></ul></div></ScrollFadeIn></div></div></section>
 
