@@ -34,31 +34,29 @@ export default function InteractionEffects() {
     animate();
 
     const sections = Array.from(document.querySelectorAll<HTMLElement>("section"));
+    let lastScrollY = window.scrollY;
     const observer = new IntersectionObserver((entries) => {
+      const scrollingDown = window.scrollY >= lastScrollY;
+      lastScrollY = window.scrollY;
       entries.forEach((entry) => {
         const section = entry.target as HTMLElement;
         if (entry.isIntersecting) {
           section.style.opacity = "1";
           section.style.filter = "blur(0px)";
-          section.style.transform = "perspective(1100px) translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)";
-          section.style.clipPath = "inset(0% 0% 0% 0% round 0px)";
+          section.style.transform = "translate3d(0, 0, 0) scale(1)";
           section.style.pointerEvents = "auto";
         } else {
-          const rect = section.getBoundingClientRect();
-          const movingDown = rect.top < 0;
           section.style.opacity = "0";
-          section.style.filter = "blur(9px)";
-          section.style.clipPath = "inset(8% 4% 8% 4% round 18px)";
-          section.style.transform = `perspective(1100px) translate3d(0, ${movingDown ? -90 : 90}px, 0) rotateX(${movingDown ? 7 : -7}deg) rotateY(${movingDown ? -3 : 3}deg) rotateZ(${movingDown ? -1.5 : 1.5}deg) scale(.94)`;
+          section.style.filter = "blur(7px)";
+          section.style.transform = `translate3d(0, ${scrollingDown ? -70 : 70}px, 0) scale(0.985)`;
           section.style.pointerEvents = "none";
         }
       });
-    }, { threshold: 0.12, rootMargin: "-5% 0px -5% 0px" });
+    }, { threshold: 0.16, rootMargin: "-8% 0px -8% 0px" });
 
     sections.forEach((section) => {
-      section.style.transition = "opacity 650ms cubic-bezier(.16,1,.3,1), transform 800ms cubic-bezier(.16,1,.3,1), filter 650ms ease, clip-path 800ms cubic-bezier(.16,1,.3,1)";
-      section.style.transformOrigin = "center center";
-      section.style.willChange = "opacity, transform, filter, clip-path";
+      section.style.transition = "opacity 600ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1), filter 600ms ease";
+      section.style.willChange = "opacity, transform, filter";
       observer.observe(section);
     });
 
@@ -70,13 +68,13 @@ export default function InteractionEffects() {
         const rect = card.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width - 0.5;
         const y = (event.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = `perspective(600px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale3d(1.075,1.075,1.075) translateY(-7px)`;
+        card.style.transform = `perspective(600px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg) scale3d(1.075, 1.075, 1.075) translateY(-7px)`;
         card.style.transition = "transform 70ms ease-out, border-color 200ms ease, box-shadow 200ms ease";
         card.style.transformStyle = "preserve-3d";
-        card.style.boxShadow = `${-x * 22}px ${-y * 22}px 50px rgba(0,0,0,.25)`;
+        card.style.boxShadow = `${-x * 22}px ${-y * 22}px 50px rgba(0,0,0,0.25)`;
       };
       const onLeave = () => {
-        card.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1) translateY(0)";
+        card.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translateY(0)";
         card.style.boxShadow = "";
         card.style.transition = "transform 400ms cubic-bezier(.2,.8,.2,1), border-color 250ms ease, box-shadow 400ms ease";
       };
