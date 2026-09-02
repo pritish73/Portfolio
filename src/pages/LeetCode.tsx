@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ExternalLink, RefreshCw, Trophy, Flame, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ExternalLink, RefreshCw, Trophy, Flame, CheckCircle2 } from "lucide-react";
 import ScrollFadeIn from "@/components/ScrollFadeIn";
 
 const USERNAME = "PritishDutta";
@@ -15,7 +14,7 @@ interface LeetCodeStats {
     lastName?: string;
     profile?: { ranking?: number; realName?: string };
     submissionCalendar?: string;
-    submitStats?: { acSubmissionNum?: CountItem[] };
+    submitStatsGlobal?: { acSubmissionNum?: CountItem[] };
   };
 }
 
@@ -27,7 +26,7 @@ export default function LeetCode() {
   const loadStats = async () => {
     setLoading(true); setError(false);
     try {
-      const response = await fetch(API_URL, { cache: "no-store" });
+      const response = await fetch(`${API_URL}&_=${Date.now()}`, { cache: "no-store" });
       if (!response.ok) throw new Error("Unable to load LeetCode stats");
       const data = await response.json();
       setStats(data?.data ?? data);
@@ -36,8 +35,9 @@ export default function LeetCode() {
 
   useEffect(() => { loadStats(); }, []);
 
+  // leetinfo-api returns accepted-problem counts under submitStatsGlobal.acSubmissionNum.
   const solved = (difficulty: string) =>
-    stats?.matchedUser?.submitStats?.acSubmissionNum?.find((x) => x.difficulty === difficulty)?.count ?? 0;
+    stats?.matchedUser?.submitStatsGlobal?.acSubmissionNum?.find((x) => x.difficulty === difficulty)?.count ?? 0;
   const total = (difficulty: string) =>
     stats?.allQuestionsCount?.find((x) => x.difficulty === difficulty)?.count ?? 0;
   const totalSolved = solved("All");
@@ -47,11 +47,10 @@ export default function LeetCode() {
   const heatmap = useMemo(() => {
     let activity: Record<string, number> = {};
     try { activity = JSON.parse(stats?.matchedUser?.submissionCalendar || "{}"); } catch { activity = {}; }
-    const days = Array.from({ length: 364 }, (_, i) => {
+    return Array.from({ length: 364 }, (_, i) => {
       const date = new Date(); date.setHours(0, 0, 0, 0); date.setDate(date.getDate() - (363 - i));
       return { date, count: activity[String(Math.floor(date.getTime() / 1000))] || 0 };
     });
-    return days;
   }, [stats]);
 
   const heatLevel = (count: number) => count === 0 ? "bg-secondary" : count < 3 ? "bg-accent/30" : count < 7 ? "bg-accent/50" : count < 15 ? "bg-accent/75" : "bg-accent";
