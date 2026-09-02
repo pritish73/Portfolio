@@ -34,7 +34,6 @@ export default function InteractionEffects() {
     animate();
 
     const sections = Array.from(document.querySelectorAll<HTMLElement>("section"));
-    const sectionHandlers = new Map<HTMLElement, (entries: IntersectionObserverEntry[]) => void>();
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const section = entry.target as HTMLElement;
@@ -47,7 +46,7 @@ export default function InteractionEffects() {
           const movingDown = rect.top < 0;
           section.style.opacity = "0";
           section.style.filter = "blur(7px)";
-          section.style.transform = `translate3d(0, ${movingDown ? -34 : 34}px, 0) scale(0.985)`;
+          section.style.transform = `translate3d(0, ${movingDown ? -70 : 70}px, 0) scale(0.985)`;
         }
       });
     }, { threshold: 0.16, rootMargin: "-8% 0px -8% 0px" });
@@ -84,7 +83,6 @@ export default function InteractionEffects() {
     return () => {
       window.removeEventListener("scroll", updateProgress); window.removeEventListener("mousemove", move);
       document.documentElement.removeEventListener("mouseleave", leave); cancelAnimationFrame(frame); observer.disconnect();
-      sectionHandlers.clear();
       handlers.forEach((h, card) => { card.removeEventListener("mousemove", h.move); card.removeEventListener("mouseleave", h.leave); });
     };
   }, []);
