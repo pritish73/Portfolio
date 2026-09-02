@@ -33,6 +33,31 @@ export default function InteractionEffects() {
     document.documentElement.addEventListener("mouseleave", leave);
     animate();
 
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section"));
+    const sectionHandlers = new Map<HTMLElement, (entries: IntersectionObserverEntry[]) => void>();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const section = entry.target as HTMLElement;
+        if (entry.isIntersecting) {
+          section.style.opacity = "1";
+          section.style.filter = "blur(0px)";
+          section.style.transform = "translate3d(0, 0, 0) scale(1)";
+        } else {
+          const rect = section.getBoundingClientRect();
+          const movingDown = rect.top < 0;
+          section.style.opacity = "0";
+          section.style.filter = "blur(7px)";
+          section.style.transform = `translate3d(0, ${movingDown ? -34 : 34}px, 0) scale(0.985)`;
+        }
+      });
+    }, { threshold: 0.16, rootMargin: "-8% 0px -8% 0px" });
+
+    sections.forEach((section) => {
+      section.style.transition = "opacity 600ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1), filter 600ms ease";
+      section.style.willChange = "opacity, transform, filter";
+      observer.observe(section);
+    });
+
     const cards = Array.from(document.querySelectorAll<HTMLElement>(".bg-card.border"));
     const handlers = new Map<HTMLElement, { move: (event: MouseEvent) => void; leave: () => void }>();
     cards.forEach((card) => {
@@ -58,7 +83,8 @@ export default function InteractionEffects() {
 
     return () => {
       window.removeEventListener("scroll", updateProgress); window.removeEventListener("mousemove", move);
-      document.documentElement.removeEventListener("mouseleave", leave); cancelAnimationFrame(frame);
+      document.documentElement.removeEventListener("mouseleave", leave); cancelAnimationFrame(frame); observer.disconnect();
+      sectionHandlers.clear();
       handlers.forEach((h, card) => { card.removeEventListener("mousemove", h.move); card.removeEventListener("mouseleave", h.leave); });
     };
   }, []);
