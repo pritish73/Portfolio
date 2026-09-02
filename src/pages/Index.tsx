@@ -3,10 +3,12 @@ import AboutSection from "@/components/portfolio/AboutSection";
 import EducationSection from "@/components/portfolio/EducationSection";
 import SkillsSection from "@/components/portfolio/SkillsSection";
 import ProjectsSection from "@/components/portfolio/ProjectsSection";
+import InteractionEffects from "@/components/portfolio/InteractionEffects";
 
 export default function Index() {
   return (
     <div className="min-h-screen bg-black text-white">
+      <InteractionEffects />
       <HeroSection />
       <AboutSection />
       <EducationSection />
