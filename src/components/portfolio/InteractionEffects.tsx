@@ -34,19 +34,22 @@ export default function InteractionEffects() {
     animate();
 
     const sections = Array.from(document.querySelectorAll<HTMLElement>("section"));
+    let lastScrollY = window.scrollY;
     const observer = new IntersectionObserver((entries) => {
+      const scrollingDown = window.scrollY >= lastScrollY;
+      lastScrollY = window.scrollY;
       entries.forEach((entry) => {
         const section = entry.target as HTMLElement;
         if (entry.isIntersecting) {
           section.style.opacity = "1";
           section.style.filter = "blur(0px)";
           section.style.transform = "translate3d(0, 0, 0) scale(1)";
+          section.style.pointerEvents = "auto";
         } else {
-          const rect = section.getBoundingClientRect();
-          const movingDown = rect.top < 0;
           section.style.opacity = "0";
           section.style.filter = "blur(7px)";
-          section.style.transform = `translate3d(0, ${movingDown ? -70 : 70}px, 0) scale(0.985)`;
+          section.style.transform = `translate3d(0, ${scrollingDown ? -70 : 70}px, 0) scale(0.985)`;
+          section.style.pointerEvents = "none";
         }
       });
     }, { threshold: 0.16, rootMargin: "-8% 0px -8% 0px" });
